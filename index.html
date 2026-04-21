@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Climate Compass | Learn About Climate Change</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="top-nav">
+        <h1>Climate Compass</h1>
+        <a class="button-link" href="#take-action">Take Action</a>
+      </nav>
+
+      <section class="hero-content">
+        <h2>Understand climate change, one clear step at a time.</h2>
+        <p>
+          Climate change is the long-term shift in temperature and weather patterns,
+          largely driven by human activities such as burning fossil fuels. This app
+          explains what is happening, why it matters, and what you can do today.
+        </p>
+        <div class="hero-stats">
+          <article>
+            <p class="stat-label">Global warming since pre-industrial era</p>
+            <p class="stat-value">~1.2°C</p>
+          </article>
+          <article>
+            <p class="stat-label">Atmospheric CO2 concentration</p>
+            <p class="stat-value">~420 ppm</p>
+          </article>
+          <article>
+            <p class="stat-label">Sea-level rise since 1900</p>
+            <p class="stat-value">~20 cm</p>
+          </article>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <section class="section" id="what-it-is">
+        <h3>What is climate change?</h3>
+        <p>
+          The atmosphere naturally traps some heat from the sun (the greenhouse
+          effect), which keeps Earth livable. But adding extra greenhouse gases like
+          carbon dioxide and methane makes that heat blanket thicker, raising global
+          temperatures and disrupting weather systems.
+        </p>
+        <div class="info-grid">
+          <article class="info-card">
+            <h4>Main causes</h4>
+            <ul>
+              <li>Burning coal, oil, and gas for energy</li>
+              <li>Deforestation and land-use change</li>
+              <li>Industrial agriculture and livestock emissions</li>
+            </ul>
+          </article>
+          <article class="info-card">
+            <h4>Why scientists are confident</h4>
+            <ul>
+              <li>Global thermometers and ocean heat records</li>
+              <li>Ice-core and satellite observations</li>
+              <li>Independent climate models reaching similar conclusions</li>
+            </ul>
+          </article>
+          <article class="info-card">
+            <h4>Why it matters</h4>
+            <ul>
+              <li>More extreme heat, floods, droughts, and wildfires</li>
+              <li>Strain on food, water, and health systems</li>
+              <li>Rising risks for coastal communities and biodiversity</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="impacts">
+        <h3>Explore climate impacts</h3>
+        <p>Select a topic to learn how climate change affects daily life.</p>
+        <div class="tabs" role="tablist" aria-label="Climate impact topics">
+          <button class="tab active" data-topic="weather" role="tab" aria-selected="true">
+            Weather
+          </button>
+          <button class="tab" data-topic="oceans" role="tab" aria-selected="false">
+            Oceans
+          </button>
+          <button class="tab" data-topic="food" role="tab" aria-selected="false">
+            Food
+          </button>
+          <button class="tab" data-topic="health" role="tab" aria-selected="false">
+            Health
+          </button>
+        </div>
+        <article class="topic-panel" id="topic-panel" aria-live="polite"></article>
+      </section>
+
+      <section class="section" id="calculator">
+        <h3>Quick personal footprint estimator</h3>
+        <p>
+          This rough estimate helps illustrate how lifestyle choices influence
+          emissions. It is educational, not a formal audit.
+        </p>
+        <form id="footprint-form" class="form-grid">
+          <label>
+            Car travel (km per week)
+            <input type="number" id="car-km" min="0" value="120" required />
+          </label>
+          <label>
+            Meat-based meals (per week)
+            <input type="number" id="meat-meals" min="0" value="7" required />
+          </label>
+          <label>
+            Household electricity (kWh per month)
+            <input type="number" id="home-kwh" min="0" value="250" required />
+          </label>
+          <button type="submit">Estimate footprint</button>
+        </form>
+        <p class="result" id="footprint-result">
+          Enter values and click “Estimate footprint”.
+        </p>
+      </section>
+
+      <section class="section" id="quiz">
+        <h3>Climate quick quiz</h3>
+        <p>Test what you learned with three fast questions.</p>
+        <form id="quiz-form">
+          <fieldset>
+            <legend>1) What most strongly drives modern global warming?</legend>
+            <label><input type="radio" name="q1" value="a" /> Changes in Earth’s orbit</label>
+            <label><input type="radio" name="q1" value="b" /> Human greenhouse gas emissions</label>
+            <label><input type="radio" name="q1" value="c" /> Volcanoes alone</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>2) Which gas contributes most to long-term warming?</legend>
+            <label><input type="radio" name="q2" value="a" /> Carbon dioxide (CO2)</label>
+            <label><input type="radio" name="q2" value="b" /> Oxygen (O2)</label>
+            <label><input type="radio" name="q2" value="c" /> Nitrogen (N2)</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>3) Which action can reduce emissions at scale?</legend>
+            <label><input type="radio" name="q3" value="a" /> Expanding clean energy</label>
+            <label><input type="radio" name="q3" value="b" /> Increasing deforestation</label>
+            <label><input type="radio" name="q3" value="c" /> Burning more coal</label>
+          </fieldset>
+          <button type="submit">Check answers</button>
+        </form>
+        <p class="result" id="quiz-result"></p>
+      </section>
+
+      <section class="section" id="take-action">
+        <h3>Choose your action plan</h3>
+        <p>Pick a few commitments. Your checklist is saved in this browser.</p>
+        <div class="checklist" id="checklist">
+          <label><input type="checkbox" data-id="public-transit" /> Use public transit, bike, or walk once more each week</label>
+          <label><input type="checkbox" data-id="plant-meals" /> Replace at least two meat meals weekly with plant-based meals</label>
+          <label><input type="checkbox" data-id="home-efficiency" /> Reduce home energy use (LEDs, insulation, smart settings)</label>
+          <label><input type="checkbox" data-id="support-policy" /> Support local climate-friendly policies and projects</label>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Educational values are approximate and intended for learning. For deeper
+        details, compare trusted sources such as IPCC, NASA Climate, and NOAA.
+      </p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

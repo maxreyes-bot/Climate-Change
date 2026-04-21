@@ -1,0 +1,278 @@
+:root {
+  color-scheme: light;
+  --bg: #f1f8f4;
+  --surface: #ffffff;
+  --text: #17342a;
+  --muted: #456d5e;
+  --accent: #1f8a5c;
+  --accent-dark: #166544;
+  --border: #d6e8df;
+  --shadow: 0 8px 24px rgba(20, 61, 45, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.hero {
+  background: linear-gradient(135deg, #0f4a30, #1f8a5c);
+  color: #f6fffb;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.top-nav {
+  width: min(1100px, 92vw);
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-nav h1 {
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+  margin: 0;
+}
+
+.button-link {
+  text-decoration: none;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+}
+
+.button-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.hero-content {
+  width: min(1100px, 92vw);
+  margin: 0 auto;
+}
+
+.hero-content h2 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  max-width: 30ch;
+  margin-bottom: 0.8rem;
+}
+
+.hero-content > p {
+  max-width: 65ch;
+  margin-bottom: 1.4rem;
+  opacity: 0.95;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.8rem;
+}
+
+.hero-stats article {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.8rem;
+  border-radius: 0.7rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.stat-value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 0.3rem;
+}
+
+main {
+  width: min(1100px, 92vw);
+  margin: -1.5rem auto 2rem;
+}
+
+.section {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.section h3 {
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  margin-bottom: 0.4rem;
+}
+
+.section > p {
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.8rem;
+}
+
+.info-card {
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: #f8fcfa;
+  padding: 0.9rem;
+}
+
+.info-card ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  background: #eff8f3;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.topic-panel {
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: #f8fcfa;
+  padding: 0.9rem;
+  min-height: 145px;
+}
+
+.topic-panel h4 {
+  margin-bottom: 0.5rem;
+}
+
+.topic-panel ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.8rem;
+  align-items: end;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+input[type="number"] {
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  padding: 0.45rem;
+  font: inherit;
+}
+
+button[type="submit"] {
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent-dark);
+}
+
+#quiz-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 0.7rem;
+}
+
+fieldset label {
+  margin-top: 0.35rem;
+}
+
+.result {
+  margin-top: 0.8rem;
+  background: #eff8f3;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.7rem;
+}
+
+.checklist {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.checklist label {
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.55rem;
+}
+
+.checklist input[type="checkbox"] {
+  margin-top: 0.2rem;
+}
+
+footer {
+  width: min(1100px, 92vw);
+  margin: 0 auto 2rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 650px) {
+  .hero {
+    padding-bottom: 2rem;
+  }
+
+  main {
+    margin-top: -1rem;
+  }
+}
