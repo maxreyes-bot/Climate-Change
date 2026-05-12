@@ -8,6 +8,11 @@ const signupForm = document.getElementById("signup-form");
 const loginForm = document.getElementById("login-form");
 const logoutButton = document.getElementById("logout-button");
 const authStatus = document.getElementById("auth-status");
+const sessionChip = document.getElementById("session-chip");
+const authTabs = document.querySelectorAll(".auth-tab");
+const authPanels = document.querySelectorAll(".auth-panel");
+const signupFeedback = document.getElementById("signup-feedback");
+const loginFeedback = document.getElementById("login-feedback");
 
 const profileForm = document.getElementById("profile-form");
 const profileResult = document.getElementById("profile-result");
@@ -15,6 +20,8 @@ const profileDisplayName = document.getElementById("profile-display-name");
 const profileLocation = document.getElementById("profile-location");
 const profileClimateFocus = document.getElementById("profile-climate-focus");
 const profileBio = document.getElementById("profile-bio");
+const profileSaveButton = document.getElementById("profile-save-button");
+const profileSaveMeta = document.getElementById("profile-save-meta");
 
 const footprintForm = document.getElementById("footprint-form");
 const footprintResult = document.getElementById("footprint-result");
@@ -31,6 +38,7 @@ const answers = { q1: "b", q2: "a", q3: "a" };
 const localChecklistStorageKey = "climate-compass-actions";
 
 let currentUser = null;
+let isProfileDirty = false;
 
 const topicContent = {
   weather: {
@@ -85,6 +93,35 @@ function setAuthStatus(message) {
   authStatus.textContent = message;
 }
 
+function setInlineMessage(element, message, type = "neutral") {
+  element.textContent = message;
+  element.classList.remove("error", "success");
+  if (type === "error" || type === "success") {
+    element.classList.add(type);
+  }
+}
+
+function clearAuthFormMessages() {
+  setInlineMessage(signupFeedback, "");
+  setInlineMessage(loginFeedback, "");
+}
+
+function setProfileMeta(message) {
+  profileSaveMeta.textContent = message;
+}
+
+function switchAuthMode(mode) {
+  authTabs.forEach((tab) => {
+    const isActive = tab.dataset.authMode === mode;
+    tab.classList.toggle("active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  });
+
+  authPanels.forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.authPanel === mode);
+  });
+}
+
 function setProfileMessage(message) {
   profileResult.textContent = message;
 }
@@ -96,10 +133,27 @@ function renderEmptyState(container, message) {
 function updateAuthControls() {
   const isLoggedIn = Boolean(currentUser);
   logoutButton.hidden = !isLoggedIn;
+  sessionChip.textContent = isLoggedIn ? `Signed in as ${currentUser.email}` : "Guest mode";
 
   profileForm.querySelectorAll("input, textarea, button").forEach((element) => {
     element.disabled = !isLoggedIn;
   });
+
+  authTabs.forEach((tab) => {
+    tab.disabled = isLoggedIn;
+  });
+
+  signupForm.querySelectorAll("input, button").forEach((element) => {
+    element.disabled = isLoggedIn;
+  });
+
+  loginForm.querySelectorAll("input, button").forEach((element) => {
+    element.disabled = isLoggedIn;
+  });
+
+  if (isLoggedIn) {
+    clearAuthFormMessages();
+  }
 }
 
 function loadLocalChecklist() {
@@ -118,7 +172,9 @@ function saveLocalChecklist() {
 
 function clearUserViewData() {
   profileForm.reset();
+  isProfileDirty = false;
   setProfileMessage("Log in to load and edit your profile.");
+  setProfileMeta('Profile changes are not synced until you click "Save profile".');
   renderEmptyState(footprintHistory, "Login to save and view footprint history.");
   renderEmptyState(quizHistory, "Login to save and view quiz history.");
   renderEmptyState(activityList, "Login to view your activity timeline.");
@@ -175,6 +231,7 @@ async function loadProfile() {
   profileLocation.value = data?.location || "";
   profileClimateFocus.value = data?.climate_focus || "";
   profileBio.value = data?.bio || "";
+  isProfileDirty = false;
 
   if (data?.last_active_at) {
     setProfileMessage(
@@ -182,10 +239,20 @@ async function loadProfile() {
         data.last_active_at
       )}`
     );
+    setProfileMeta(`Profile synced at ${formatDate(data.last_active_at)}.`);
     return;
   }
 
   setProfileMessage("Profile loaded.");
+  setProfileMeta('Profile changes are not synced until you click "Save profile".');
+}
+
+function markProfileAsDirty() {
+  if (!currentUser) return;
+  if (isProfileDirty) return;
+
+  isProfileDirty = true;
+  setProfileMeta("You have unsaved profile changes.");
 }
 
 async function saveProfile(event) {
@@ -195,6 +262,9 @@ async function saveProfile(event) {
     setProfileMessage("Please login before saving profile updates.");
     return;
   }
+
+  profileSaveButton.disabled = true;
+  profileSaveButton.textContent = "Saving...";
 
   const payload = {
     id: currentUser.id,
@@ -212,15 +282,22 @@ async function saveProfile(event) {
 
   if (error) {
     setProfileMessage(`Failed to save profile: ${error.message}`);
+    setProfileMeta("Save failed. Review your profile details and try again.");
+    profileSaveButton.disabled = false;
+    profileSaveButton.textContent = "Save profile";
     return;
   }
 
   setProfileMessage("Profile saved successfully.");
+  setProfileMeta(`Profile synced at ${formatDate(new Date().toISOString())}.`);
+  isProfileDirty = false;
   await logActivity("profile_updated", {
     location: payload.location,
     climate_focus: payload.climate_focus,
   });
-  await loadActivity();
+  await Promise.all([loadActivity(), loadProfile()]);
+  profileSaveButton.disabled = false;
+  profileSaveButton.textContent = "Save profile";
 }
 
 function renderHistoryList(container, records, formatter) {
@@ -522,6 +599,7 @@ async function recordTopicView(topic) {
 async function initializeSession(user) {
   currentUser = user;
   updateAuthControls();
+  switchAuthMode("login");
 
   await ensureUserProfile(user);
   setAuthStatus(`Logged in as ${user.email}`);
@@ -542,6 +620,9 @@ async function signup(event) {
     return;
   }
 
+  clearAuthFormMessages();
+  setInlineMessage(signupFeedback, "Creating account...");
+
   const email = document.getElementById("signup-email").value.trim();
   const password = document.getElementById("signup-password").value;
   const displayName = document.getElementById("signup-name").value.trim();
@@ -557,17 +638,28 @@ async function signup(event) {
   });
 
   if (error) {
+    setInlineMessage(signupFeedback, error.message, "error");
     setAuthStatus(`Sign-up failed: ${error.message}`);
     return;
   }
 
-  if (data.user) {
-    await ensureUserProfile(data.user);
+  if (data.session?.user) {
+    setInlineMessage(signupFeedback, "Account created and signed in.", "success");
+    await initializeSession(data.session.user);
+    setAuthStatus(`Welcome, ${data.session.user.email}. Your profile can now be saved.`);
+  } else if (data.user) {
+    setInlineMessage(
+      signupFeedback,
+      "Account created. Check your email and then log in.",
+      "success"
+    );
+    document.getElementById("login-email").value = email;
+    switchAuthMode("login");
+    setAuthStatus(
+      "Sign-up successful. If email confirmation is enabled, confirm your email before logging in."
+    );
   }
 
-  setAuthStatus(
-    "Sign-up successful. If email confirmation is enabled, confirm your email before logging in."
-  );
   signupForm.reset();
 }
 
@@ -578,22 +670,34 @@ async function login(event) {
     return;
   }
 
+  clearAuthFormMessages();
+  setInlineMessage(loginFeedback, "Logging you in...");
+
   const email = document.getElementById("login-email").value.trim();
   const password = document.getElementById("login-password").value;
 
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
+    setInlineMessage(loginFeedback, error.message, "error");
     setAuthStatus(`Login failed: ${error.message}`);
     return;
   }
 
+  setInlineMessage(loginFeedback, "Login successful.", "success");
   setAuthStatus(`Login successful for ${email}`);
   loginForm.reset();
 }
 
 async function logout() {
   if (!supabase) return;
-  await supabase.auth.signOut();
+  setAuthStatus("Signing out...");
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    setAuthStatus(`Sign out failed: ${error.message}`);
+    return;
+  }
+
+  clearAuthFormMessages();
 }
 
 function wireTopicTabs() {
@@ -613,6 +717,9 @@ function wireTopicTabs() {
 }
 
 function disableAuthAndDataFeatures() {
+  authTabs.forEach((tab) => {
+    tab.disabled = true;
+  });
   signupForm.querySelectorAll("input, button").forEach((el) => {
     el.disabled = true;
   });
@@ -622,17 +729,29 @@ function disableAuthAndDataFeatures() {
   profileForm.querySelectorAll("input, textarea, button").forEach((el) => {
     el.disabled = true;
   });
+  sessionChip.textContent = "Supabase unavailable";
   setAuthStatus(
     "Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local."
   );
 }
 
 function setupEventListeners() {
+  authTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      if (tab.disabled) return;
+      switchAuthMode(tab.dataset.authMode);
+      clearAuthFormMessages();
+    });
+  });
+
   signupForm.addEventListener("submit", signup);
   loginForm.addEventListener("submit", login);
   logoutButton.addEventListener("click", logout);
 
   profileForm.addEventListener("submit", saveProfile);
+  profileForm.querySelectorAll("input, textarea").forEach((element) => {
+    element.addEventListener("input", markProfileAsDirty);
+  });
   footprintForm.addEventListener("submit", handleFootprintSubmit);
   quizForm.addEventListener("submit", handleQuizSubmit);
   checklist.addEventListener("change", handleChecklistChange);
@@ -648,6 +767,7 @@ function setupEventListeners() {
 async function init() {
   setupEventListeners();
   wireTopicTabs();
+  switchAuthMode("login");
   renderTopic("weather");
   loadLocalChecklist();
   clearUserViewData();
@@ -668,15 +788,21 @@ async function init() {
     setAuthStatus("Not logged in. Create an account or login to sync your data.");
   }
 
-  supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     if (session?.user) {
       void initializeSession(session.user);
+      if (event === "SIGNED_IN") {
+        setAuthStatus(`Welcome back, ${session.user.email}.`);
+      }
       return;
     }
 
     currentUser = null;
     updateAuthControls();
     setAuthStatus("Logged out. Local app mode remains available.");
+    if (event === "SIGNED_OUT") {
+      setInlineMessage(loginFeedback, "You have signed out.", "success");
+    }
     clearUserViewData();
   });
 }

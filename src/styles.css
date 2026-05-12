@@ -144,6 +144,61 @@ main {
   gap: 0.8rem;
 }
 
+.auth-shell {
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  background: #f8fcfa;
+  padding: 0.9rem;
+}
+
+.auth-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.9rem;
+}
+
+.auth-tabs {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.15rem;
+  background: #edf7f1;
+}
+
+.auth-tab {
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+}
+
+.auth-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.session-chip {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: #eaf4ee;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+
+.auth-panel {
+  display: none;
+}
+
+.auth-panel.active {
+  display: grid;
+  gap: 0.6rem;
+}
+
 .info-card {
   border: 1px solid var(--border);
   border-radius: 0.8rem;
@@ -283,6 +338,7 @@ fieldset label {
   gap: 0.7rem;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: 0.9rem;
 }
 
 .result {
@@ -292,6 +348,27 @@ fieldset label {
   border-radius: 0.5rem;
   padding: 0.55rem 0.7rem;
   flex: 1;
+}
+
+.inline-message {
+  min-height: 1.2rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.inline-message.error {
+  color: var(--danger);
+}
+
+.inline-message.success {
+  color: var(--accent-dark);
+}
+
+.profile-save-meta {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .history-box {
@@ -356,5 +433,10 @@ footer {
 
   main {
     margin-top: -1rem;
+  }
+
+  .auth-header-row {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

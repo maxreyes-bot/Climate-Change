@@ -38,14 +38,52 @@
 
     <main>
       <section class="section" id="auth">
-        <h3>Create an account or log in</h3>
+        <h3>Account access</h3>
         <p>
-          Auth is powered by Supabase. Sign in to save your profile, quiz history,
-          footprint entries, and action checklist to the cloud.
+          Log in or sign up to save your profile information, quiz history, footprint
+          entries, and climate action checklist to your account.
         </p>
-        <div class="auth-grid">
-          <form id="signup-form" class="info-card">
-            <h4>Sign up</h4>
+        <div class="auth-shell">
+          <div class="auth-header-row">
+            <div class="auth-tabs" role="tablist" aria-label="Authentication forms">
+              <button
+                type="button"
+                class="auth-tab active"
+                data-auth-mode="login"
+                role="tab"
+                aria-selected="true"
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                class="auth-tab"
+                data-auth-mode="signup"
+                role="tab"
+                aria-selected="false"
+              >
+                Sign up
+              </button>
+            </div>
+            <p class="session-chip" id="session-chip">Guest mode</p>
+          </div>
+
+          <form id="login-form" class="info-card auth-panel active" data-auth-panel="login">
+            <h4>Log in to your account</h4>
+            <label>
+              Email
+              <input type="email" id="login-email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" id="login-password" minlength="8" required />
+            </label>
+            <button type="submit">Log in</button>
+            <p class="inline-message" id="login-feedback"></p>
+          </form>
+
+          <form id="signup-form" class="info-card auth-panel" data-auth-panel="signup">
+            <h4>Create your account</h4>
             <label>
               Display name
               <input type="text" id="signup-name" maxlength="80" />
@@ -59,19 +97,7 @@
               <input type="password" id="signup-password" minlength="8" required />
             </label>
             <button type="submit">Create account</button>
-          </form>
-
-          <form id="login-form" class="info-card">
-            <h4>Login</h4>
-            <label>
-              Email
-              <input type="email" id="login-email" required />
-            </label>
-            <label>
-              Password
-              <input type="password" id="login-password" minlength="8" required />
-            </label>
-            <button type="submit">Login</button>
+            <p class="inline-message" id="signup-feedback"></p>
           </form>
         </div>
         <div class="status-row">
@@ -79,7 +105,7 @@
             Not logged in. Your learning can still continue without an account.
           </p>
           <button id="logout-button" class="secondary-button" type="button" hidden>
-            Logout
+            Sign out
           </button>
         </div>
       </section>
@@ -111,9 +137,12 @@
             Bio
             <textarea id="profile-bio" maxlength="500" rows="3"></textarea>
           </label>
-          <button type="submit">Save profile</button>
+          <button id="profile-save-button" type="submit">Save profile</button>
         </form>
         <p class="result" id="profile-result">Log in to load and edit your profile.</p>
+        <p class="profile-save-meta" id="profile-save-meta">
+          Profile changes are not synced until you click "Save profile".
+        </p>
       </section>
 
       <section class="section" id="what-it-is">
