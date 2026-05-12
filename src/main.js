@@ -623,7 +623,7 @@ function disableAuthAndDataFeatures() {
     el.disabled = true;
   });
   setAuthStatus(
-    "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.local."
+    "Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local."
   );
 }
 

@@ -23,8 +23,8 @@ This creates:
 Create `.env.local` in the repo root:
 
 ```bash
-VITE_SUPABASE_URL=https://efsudcugiqkvhcnyghhw.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_URL=https://efsudcugiqkvhcnyghhw.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
 The app reads these from `import.meta.env` through `src/supabaseClient.js`.
