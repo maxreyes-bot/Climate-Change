@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Climate Compass | Learn About Climate Change</title>
-    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="hero">
@@ -14,11 +13,11 @@
       </nav>
 
       <section class="hero-content">
-        <h2>Understand climate change, one clear step at a time.</h2>
+        <h2>Understand climate change and daily-life impacts in practical terms.</h2>
         <p>
-          Climate change is the long-term shift in temperature and weather patterns,
-          largely driven by human activities such as burning fossil fuels. This app
-          explains what is happening, why it matters, and what you can do today.
+          Climate change is the long-term shift in temperatures and weather patterns,
+          mostly driven by burning fossil fuels. This app helps people understand the
+          science, track their learning, and record climate-positive habits over time.
         </p>
         <div class="hero-stats">
           <article>
@@ -38,6 +37,85 @@
     </header>
 
     <main>
+      <section class="section" id="auth">
+        <h3>Create an account or log in</h3>
+        <p>
+          Auth is powered by Supabase. Sign in to save your profile, quiz history,
+          footprint entries, and action checklist to the cloud.
+        </p>
+        <div class="auth-grid">
+          <form id="signup-form" class="info-card">
+            <h4>Sign up</h4>
+            <label>
+              Display name
+              <input type="text" id="signup-name" maxlength="80" />
+            </label>
+            <label>
+              Email
+              <input type="email" id="signup-email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" id="signup-password" minlength="8" required />
+            </label>
+            <button type="submit">Create account</button>
+          </form>
+
+          <form id="login-form" class="info-card">
+            <h4>Login</h4>
+            <label>
+              Email
+              <input type="email" id="login-email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" id="login-password" minlength="8" required />
+            </label>
+            <button type="submit">Login</button>
+          </form>
+        </div>
+        <div class="status-row">
+          <p id="auth-status" class="result">
+            Not logged in. Your learning can still continue without an account.
+          </p>
+          <button id="logout-button" class="secondary-button" type="button" hidden>
+            Logout
+          </button>
+        </div>
+      </section>
+
+      <section class="section" id="profile">
+        <h3>Your profile</h3>
+        <p>
+          Keep your profile up to date. Your profile also updates as you use the app.
+        </p>
+        <form id="profile-form" class="form-grid">
+          <label>
+            Display name
+            <input type="text" id="profile-display-name" maxlength="80" />
+          </label>
+          <label>
+            Location
+            <input type="text" id="profile-location" maxlength="120" />
+          </label>
+          <label>
+            Climate focus
+            <input
+              type="text"
+              id="profile-climate-focus"
+              maxlength="120"
+              placeholder="Examples: clean energy, transport, food systems"
+            />
+          </label>
+          <label class="full-width">
+            Bio
+            <textarea id="profile-bio" maxlength="500" rows="3"></textarea>
+          </label>
+          <button type="submit">Save profile</button>
+        </form>
+        <p class="result" id="profile-result">Log in to load and edit your profile.</p>
+      </section>
+
       <section class="section" id="what-it-is">
         <h3>What is climate change?</h3>
         <p>
@@ -58,7 +136,7 @@
           <article class="info-card">
             <h4>Why scientists are confident</h4>
             <ul>
-              <li>Global thermometers and ocean heat records</li>
+              <li>Global thermometer and ocean heat records</li>
               <li>Ice-core and satellite observations</li>
               <li>Independent climate models reaching similar conclusions</li>
             </ul>
@@ -66,9 +144,9 @@
           <article class="info-card">
             <h4>Why it matters</h4>
             <ul>
-              <li>More extreme heat, floods, droughts, and wildfires</li>
-              <li>Strain on food, water, and health systems</li>
-              <li>Rising risks for coastal communities and biodiversity</li>
+              <li>More intense heat, floods, droughts, and wildfires</li>
+              <li>Pressure on food, water, and public health systems</li>
+              <li>Rising risk for coastal communities and biodiversity</li>
             </ul>
           </article>
         </div>
@@ -76,7 +154,10 @@
 
       <section class="section" id="impacts">
         <h3>Explore climate impacts</h3>
-        <p>Select a topic to learn how climate change affects daily life.</p>
+        <p>
+          Select a topic to learn how climate change affects daily life. Topic views
+          are saved to your account when logged in.
+        </p>
         <div class="tabs" role="tablist" aria-label="Climate impact topics">
           <button class="tab active" data-topic="weather" role="tab" aria-selected="true">
             Weather
@@ -98,7 +179,7 @@
         <h3>Quick personal footprint estimator</h3>
         <p>
           This rough estimate helps illustrate how lifestyle choices influence
-          emissions. It is educational, not a formal audit.
+          emissions. Logged-in users store estimate history in Supabase.
         </p>
         <form id="footprint-form" class="form-grid">
           <label>
@@ -116,8 +197,12 @@
           <button type="submit">Estimate footprint</button>
         </form>
         <p class="result" id="footprint-result">
-          Enter values and click “Estimate footprint”.
+          Enter values and click "Estimate footprint".
         </p>
+        <div class="history-box">
+          <h4>Recent footprint entries</h4>
+          <ul id="footprint-history" class="history-list"></ul>
+        </div>
       </section>
 
       <section class="section" id="quiz">
@@ -147,11 +232,18 @@
           <button type="submit">Check answers</button>
         </form>
         <p class="result" id="quiz-result"></p>
+        <div class="history-box">
+          <h4>Recent quiz attempts</h4>
+          <ul id="quiz-history" class="history-list"></ul>
+        </div>
       </section>
 
       <section class="section" id="take-action">
         <h3>Choose your action plan</h3>
-        <p>Pick a few commitments. Your checklist is saved in this browser.</p>
+        <p>
+          Pick a few commitments. Selections save to your account when logged in, and
+          in local storage when logged out.
+        </p>
         <div class="checklist" id="checklist">
           <label><input type="checkbox" data-id="public-transit" /> Use public transit, bike, or walk once more each week</label>
           <label><input type="checkbox" data-id="plant-meals" /> Replace at least two meat meals weekly with plant-based meals</label>
@@ -159,15 +251,24 @@
           <label><input type="checkbox" data-id="support-policy" /> Support local climate-friendly policies and projects</label>
         </div>
       </section>
+
+      <section class="section" id="activity">
+        <h3>Recent activity</h3>
+        <p>
+          See a timeline of your learning interactions. This helps you track progress
+          over time.
+        </p>
+        <ul id="activity-list" class="history-list"></ul>
+      </section>
     </main>
 
     <footer>
       <p>
-        Educational values are approximate and intended for learning. For deeper
-        details, compare trusted sources such as IPCC, NASA Climate, and NOAA.
+        Educational values are approximate and intended for learning. Compare trusted
+        sources such as IPCC, NASA Climate, and NOAA for deeper detail.
       </p>
     </footer>
 
-    <script src="app.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
