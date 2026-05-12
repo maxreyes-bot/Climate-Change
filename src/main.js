@@ -1,5 +1,4 @@
-import "./styles.css";
-import { hasSupabaseCredentials, supabase } from "./supabaseClient";
+import { hasSupabaseCredentials, supabase } from "./supabaseClient.js";
 
 const topicPanel = document.getElementById("topic-panel");
 const tabs = document.querySelectorAll(".tab");

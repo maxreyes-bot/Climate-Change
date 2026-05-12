@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const runtimeEnv = import.meta.env || {};
+const supabaseUrl = runtimeEnv.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = runtimeEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
 export const hasSupabaseCredentials = Boolean(supabaseUrl && supabaseAnonKey);
 
