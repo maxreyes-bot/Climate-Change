@@ -17,7 +17,17 @@
     <header class="hero">
       <nav class="top-nav">
         <h1>Climate Compass</h1>
-        <a class="button-link" href="#take-action">Take Action</a>
+        <div class="top-nav-actions">
+          <a class="button-link" href="#take-action">Take Action</a>
+          <p class="session-chip top-session-chip" id="session-chip">Guest mode</p>
+          <button type="button" class="nav-auth-button" id="open-login-button">Log in</button>
+          <button type="button" class="nav-auth-button nav-auth-signup" id="open-signup-button">
+            Sign up
+          </button>
+          <button id="logout-button" class="secondary-button nav-signout-button" type="button" hidden>
+            Sign out
+          </button>
+        </div>
       </nav>
 
       <section class="hero-content">
@@ -45,83 +55,16 @@
     </header>
 
     <main>
-      <section class="section" id="auth">
-        <h3>Account access</h3>
-        <p>
-          Log in or sign up to save your profile information, quiz history, footprint
-          entries, and climate action checklist to your account.
-        </p>
-        <div class="auth-shell">
-          <div class="auth-header-row">
-            <div class="auth-tabs" role="tablist" aria-label="Authentication forms">
-              <button
-                type="button"
-                class="auth-tab active"
-                data-auth-mode="login"
-                role="tab"
-                aria-selected="true"
-              >
-                Log in
-              </button>
-              <button
-                type="button"
-                class="auth-tab"
-                data-auth-mode="signup"
-                role="tab"
-                aria-selected="false"
-              >
-                Sign up
-              </button>
-            </div>
-            <p class="session-chip" id="session-chip">Guest mode</p>
-          </div>
-
-          <form id="login-form" class="info-card auth-panel active" data-auth-panel="login">
-            <h4>Log in to your account</h4>
-            <label>
-              Email
-              <input type="email" id="login-email" required />
-            </label>
-            <label>
-              Password
-              <input type="password" id="login-password" minlength="8" required />
-            </label>
-            <button type="submit">Log in</button>
-            <p class="inline-message" id="login-feedback"></p>
-          </form>
-
-          <form id="signup-form" class="info-card auth-panel" data-auth-panel="signup">
-            <h4>Create your account</h4>
-            <label>
-              Display name
-              <input type="text" id="signup-name" maxlength="80" />
-            </label>
-            <label>
-              Email
-              <input type="email" id="signup-email" required />
-            </label>
-            <label>
-              Password
-              <input type="password" id="signup-password" minlength="8" required />
-            </label>
-            <button type="submit">Create account</button>
-            <p class="inline-message" id="signup-feedback"></p>
-          </form>
-        </div>
-        <div class="status-row">
-          <p id="auth-status" class="result">
-            Not logged in. Your learning can still continue without an account.
-          </p>
-          <button id="logout-button" class="secondary-button" type="button" hidden>
-            Sign out
-          </button>
-        </div>
-      </section>
-
       <section class="section" id="profile">
         <h3>Your profile</h3>
         <p>
           Keep your profile up to date. Your profile also updates as you use the app.
+        </p>
+        <p class="profile-login-hint" id="profile-login-hint">
+          Want to save profile information? Use the top-right Login or Sign up buttons.
+          <button type="button" class="link-button" id="open-auth-from-profile">
+            Open account access
+          </button>
         </p>
         <form id="profile-form" class="form-grid">
           <label>
@@ -305,6 +248,80 @@
         sources such as IPCC, NASA Climate, and NOAA for deeper detail.
       </p>
     </footer>
+
+    <div class="auth-modal hidden" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <div class="auth-modal-card">
+        <div class="auth-modal-header">
+          <h3 id="auth-modal-title">Account access</h3>
+          <button type="button" class="icon-button" id="close-auth-modal" aria-label="Close account dialog">
+            ×
+          </button>
+        </div>
+        <p class="auth-modal-subtitle">
+          Login or sign up to save your profile, quiz history, footprint entries, and
+          action checklist.
+        </p>
+        <div class="auth-shell">
+          <div class="auth-header-row">
+            <div class="auth-tabs" role="tablist" aria-label="Authentication forms">
+              <button
+                type="button"
+                class="auth-tab active"
+                data-auth-mode="login"
+                role="tab"
+                aria-selected="true"
+              >
+                Log in
+              </button>
+              <button
+                type="button"
+                class="auth-tab"
+                data-auth-mode="signup"
+                role="tab"
+                aria-selected="false"
+              >
+                Sign up
+              </button>
+            </div>
+          </div>
+
+          <form id="login-form" class="info-card auth-panel active" data-auth-panel="login">
+            <h4>Log in to your account</h4>
+            <label>
+              Email
+              <input type="email" id="login-email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" id="login-password" minlength="8" required />
+            </label>
+            <button type="submit">Log in</button>
+            <p class="inline-message" id="login-feedback"></p>
+          </form>
+
+          <form id="signup-form" class="info-card auth-panel" data-auth-panel="signup">
+            <h4>Create your account</h4>
+            <label>
+              Display name
+              <input type="text" id="signup-name" maxlength="80" />
+            </label>
+            <label>
+              Email
+              <input type="email" id="signup-email" required />
+            </label>
+            <label>
+              Password
+              <input type="password" id="signup-password" minlength="8" required />
+            </label>
+            <button type="submit">Create account</button>
+            <p class="inline-message" id="signup-feedback"></p>
+          </form>
+        </div>
+        <p id="auth-status" class="result">
+          Not logged in. Your learning can still continue without an account.
+        </p>
+      </div>
+    </div>
 
     <script type="module" src="./src/main.js"></script>
   </body>

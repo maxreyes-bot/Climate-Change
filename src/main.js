@@ -6,6 +6,11 @@ const tabs = document.querySelectorAll(".tab");
 const signupForm = document.getElementById("signup-form");
 const loginForm = document.getElementById("login-form");
 const logoutButton = document.getElementById("logout-button");
+const openLoginButton = document.getElementById("open-login-button");
+const openSignupButton = document.getElementById("open-signup-button");
+const openAuthFromProfile = document.getElementById("open-auth-from-profile");
+const closeAuthModalButton = document.getElementById("close-auth-modal");
+const authModal = document.getElementById("auth-modal");
 const authStatus = document.getElementById("auth-status");
 const sessionChip = document.getElementById("session-chip");
 const authTabs = document.querySelectorAll(".auth-tab");
@@ -21,6 +26,7 @@ const profileClimateFocus = document.getElementById("profile-climate-focus");
 const profileBio = document.getElementById("profile-bio");
 const profileSaveButton = document.getElementById("profile-save-button");
 const profileSaveMeta = document.getElementById("profile-save-meta");
+const profileLoginHint = document.getElementById("profile-login-hint");
 
 const footprintForm = document.getElementById("footprint-form");
 const footprintResult = document.getElementById("footprint-result");
@@ -121,6 +127,17 @@ function switchAuthMode(mode) {
   });
 }
 
+function openAuthModal(mode = "login") {
+  switchAuthMode(mode);
+  authModal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeAuthModal() {
+  authModal.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
 function setProfileMessage(message) {
   profileResult.textContent = message;
 }
@@ -132,6 +149,9 @@ function renderEmptyState(container, message) {
 function updateAuthControls() {
   const isLoggedIn = Boolean(currentUser);
   logoutButton.hidden = !isLoggedIn;
+  openLoginButton.hidden = isLoggedIn;
+  openSignupButton.hidden = isLoggedIn;
+  profileLoginHint.hidden = isLoggedIn;
   sessionChip.textContent = isLoggedIn ? `Signed in as ${currentUser.email}` : "Guest mode";
 
   profileForm.querySelectorAll("input, textarea, button").forEach((element) => {
@@ -599,6 +619,7 @@ async function initializeSession(user) {
   currentUser = user;
   updateAuthControls();
   switchAuthMode("login");
+  closeAuthModal();
 
   await ensureUserProfile(user);
   setAuthStatus(`Logged in as ${user.email}`);
@@ -716,6 +737,10 @@ function wireTopicTabs() {
 }
 
 function disableAuthAndDataFeatures() {
+  closeAuthModal();
+  openLoginButton.disabled = true;
+  openSignupButton.disabled = true;
+  openAuthFromProfile.disabled = true;
   authTabs.forEach((tab) => {
     tab.disabled = true;
   });
@@ -735,6 +760,35 @@ function disableAuthAndDataFeatures() {
 }
 
 function setupEventListeners() {
+  openLoginButton.addEventListener("click", () => {
+    openAuthModal("login");
+    clearAuthFormMessages();
+  });
+
+  openSignupButton.addEventListener("click", () => {
+    openAuthModal("signup");
+    clearAuthFormMessages();
+  });
+
+  openAuthFromProfile.addEventListener("click", () => {
+    openAuthModal("login");
+    clearAuthFormMessages();
+  });
+
+  closeAuthModalButton.addEventListener("click", closeAuthModal);
+
+  authModal.addEventListener("click", (event) => {
+    if (event.target === authModal) {
+      closeAuthModal();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !authModal.classList.contains("hidden")) {
+      closeAuthModal();
+    }
+  });
+
   authTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       if (tab.disabled) return;
@@ -770,6 +824,7 @@ async function init() {
   renderTopic("weather");
   loadLocalChecklist();
   clearUserViewData();
+  updateAuthControls();
 
   if (!hasSupabaseCredentials || !supabase) {
     disableAuthAndDataFeatures();
